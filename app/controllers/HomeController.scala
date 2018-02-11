@@ -2,16 +2,20 @@ package controllers
 
 import javax.inject._
 
-import play.api.data.Form
-import play.api.data.Forms.{ optional, text }
+import jp.t2v.lab.play2.auth.OptionalAuthElement
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc._
+import services.UserService
 
 @Singleton
-class HomeController @Inject()(val messagesApi: MessagesApi) extends Controller with I18nSupport {
+class HomeController @Inject()(val userService: UserService, val messagesApi: MessagesApi)
+    extends Controller
+    with I18nSupport
+    with AuthConfigSupport
+    with OptionalAuthElement { // `AuthConfigSupport`,`OptionalAuthElement`をミックスイン
 
-  def index: Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.index())
+  def index: Action[AnyContent] = StackAction { implicit request => // `index`アクションを`Action`から`StackAction`に変更
+    Ok(views.html.index(loggedIn)) // `views.html.index()`から`views.html.index(loggedIn)`に変更
   }
 
 }
