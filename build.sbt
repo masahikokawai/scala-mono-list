@@ -49,6 +49,7 @@ libraryDependencies ++= Seq(
   "ch.qos.logback"         % "logback-classic"               % "1.2.3",
   "com.adrianhurt"         %% "play-bootstrap"               % "1.1-P25-B3", // 追加
   "com.github.t3hnar"      %% "scala-bcrypt"                 % "3.0", // 追加
+  "com.github.j5ik2o"     %% "scala-rakuten-item-search-api" % "1.0.3",
   "jp.t2v"                 %% "play2-auth"                   % "0.14.2", // 追加
   "jp.t2v"                 %% "play2-auth-test"              % "0.14.2" % Test, // 追加
   "jp.t2v"                 %% "play2-pager"                  % "0.1.0", // 追加
