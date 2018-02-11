@@ -1,31 +1,37 @@
-@(currentUserOpt: Option[User], items: Seq[Item])(implicit messages: Messages, flash: Flash, request: RequestHeader)
+@* 変更: itemsの型を変更してカウント値を指定できるようにする *@
+@(currentUserOpt: Option[User], items: Seq[(Item, Option[Int])], reload: Boolean = false)(implicit messages: Messages, flash: Flash, request: RequestHeader)
 
 @if(items.nonEmpty) {
     <div class="row">
-    @for(i <- items.indices) {
-        @defining(items(i)){ item =>
-            <div class="item">
-                <div class="col-md-3 col-sm-4 col-xs-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading text-center">
-                            <img src="@item.imageUrl">
-                        </div>
-                        <div class="panel-body">
-                            @* 追加する *@
-                            @if(currentUserOpt.isDefined && item.id.isDefined) {
-                                <p class="item-title"><a href="@routes.ItemsController.show(item.id.get)">@item.name</a></p>
-                            } else {
-                                <p class="item-title"><a href="@item.url">@item.name</a></p>
-                            }
-                            <div class="buttons text-center">
-                            @if(currentUserOpt.isDefined) {
-                                @views.html.items.buttons(i, currentUserOpt.get, item)
-                            }
-                            </div>
-                        </div>
+    @for(index <- items.indices) {
+        @defining(items(index)){ case (item, itemCount) =>
+        <div class="item">
+            <div class="col-md-3 col-sm-4 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-center">
+                        <img src="@item.imageUrl">
                     </div>
-                </div>
-            </div>
+                    <div class="panel-body">
+                        @if(item.id.isDefined) {
+                            <p class="item-title"><a href="@routes.ItemsController.show(item.id.get)">@item.name</a></p>
+                        } else {
+                            <p class="item-title"><a href="@item.url">@item.name</a></p>
+                        }
+                    <div class="buttons text-center">
+                    @if(currentUserOpt.isDefined) {
+                        @views.html.items.buttons(index, currentUserOpt.get, item, reload)
+                    }
+                    </div>
+                    </div>
+                    @* 変更: カウント値があれば順位を表示する *@
+                    @if(itemCount.isDefined) {
+                        <div class="panel-footer">
+                            <p class="text-center">@{index + 1}位: @itemCount</p>
+                        </div>
+                    }
+        </div>
+        </div>
+        </div>
         }
     }
     </div>
